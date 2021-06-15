@@ -2,8 +2,11 @@ const express = require('express');
 const morgan = require('morgan');
 const helmet = require('helmet');
 const cors = require('cors');
+const connectDB = require('./config/db');
 
 require('dotenv').config();
+
+connectDB();
 
 const middlewares = require('./middlewares');
 const api = require('./api');
