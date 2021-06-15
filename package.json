@@ -1,0 +1,15 @@
+{
+  "name": "locary",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "John Rafael Cadorna",
+  "license": "MIT",
+  "scripts": {
+    "server": "yarn --cwd backend run dev ",
+    "client": "yarn --cwd frontend run start ",
+    "dev": "concurrently \"yarn run server\" \"yarn run client\""
+  },
+  "devDependencies": {
+    "concurrently": "^6.2.0"
+  }
+}
