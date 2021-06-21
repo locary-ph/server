@@ -4,7 +4,9 @@ const helmet = require('helmet');
 const cors = require('cors');
 const connectDB = require('./config/db');
 
-require('dotenv').config();
+if (process.env.NODE_ENV !== 'production') {
+  require('dotenv').config();
+}
 
 connectDB();
 
@@ -20,7 +22,7 @@ app.use(express.json());
 
 app.get('/', (req, res) => {
   res.json({
-    message: '🦄🌈✨👋🌎🌍🌏✨🌈🦄'
+    message: 'API running'
   });
 });
 
