@@ -15,6 +15,7 @@ const middlewares = require("./middlewares");
 const api = require("./api");
 
 const app = express();
+appp.use(express.json());
 
 app.use(morgan("dev"));
 app.use(helmet());
