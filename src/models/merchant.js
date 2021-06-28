@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const bcrypt = require("bcryptjs");
 
 const { Schema } = mongoose;
 
@@ -16,5 +17,9 @@ const MerchantSchema = new Schema({
   lastName: defaultOptions,
   shopUrl: defaultOptions
 }, { timestamps: true });
+
+MerchantSchema.methods.isCorrectPassword = async function (enteredPassword) {
+  return await bcrypt.compare(enteredPassword, this.password);
+};
 
 module.exports = mongoose.model("Merchant", MerchantSchema);
