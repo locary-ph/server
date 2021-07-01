@@ -3,8 +3,9 @@ const Product = require("../models/product");
 // @desc  Fetch all products of a merchant
 // @route GET /api/v1/products
 async function getProducts(req, res, next) {
-  const products = await Product.find({});
-  res.json(products);
+  const products = await Product.find({ merchantId: req.user._id });
+
+  if (products) res.json(products);
 }
 
 // @desc  Fetch single product
