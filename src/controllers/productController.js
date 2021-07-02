@@ -5,7 +5,7 @@ const Product = require("../models/product");
 async function getProducts(req, res, next) {
   const products = await Product.find({ merchantId: req.user._id });
 
-  if (products) res.json(products);
+  res.json(products);
 }
 
 // @desc  Fetch single product

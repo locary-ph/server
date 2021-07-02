@@ -9,7 +9,11 @@ const defaultOptions = {
 };
 
 const MerchantSchema = new Schema({
-  deliveryAreas: { type: Map, of: [String], default: {} }, // key: province, value: cities
+  deliveryAreas: {
+    type: Map,
+    of: [String],
+    default: {}
+  }, // key: province, value: cities
   email: defaultOptions,
   password: defaultOptions,
   shopName: defaultOptions,
@@ -21,5 +25,14 @@ const MerchantSchema = new Schema({
 MerchantSchema.methods.isCorrectPassword = async function (enteredPassword) {
   return await bcrypt.compare(enteredPassword, this.password);
 };
+
+MerchantSchema.pre("save", async function (next) {
+  if (!this.isModified("password")) {
+    next();
+  }
+
+  const salt = await bcrypt.genSalt(10);
+  this.password = await bcrypt.hash(this.password, salt);
+});
 
 module.exports = mongoose.model("Merchant", MerchantSchema);

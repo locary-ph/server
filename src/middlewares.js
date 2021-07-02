@@ -33,7 +33,8 @@ async function authorize(req, res, next) {
       next();
     } catch (e) {
       console.error(e);
-      throw new Error("Not authorized, invalis token");
+      res.status(401);
+      throw new Error("Not authorized, invalid token");
     }
   }
 
