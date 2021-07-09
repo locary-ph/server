@@ -41,6 +41,19 @@ async function getOrders(req, res, next) {
   res.json(orders);
 }
 
+// @desc Fetch a single order
+// @route GET /api/v1/orders/:id
+async function getOrders(req, res, next) {
+  const order = await Order.findById(req.params.id);
+
+  if (order) {
+    res.json(order);
+  } else {
+    res.status(404);
+    throw new Error("Order details not found");
+  }
+}
+
 module.exports = {
   createOrder,
   getOrders
