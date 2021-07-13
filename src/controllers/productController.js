@@ -1,5 +1,9 @@
 const Product = require("../models/product");
 
+// TODO(#2): Write tests for product controller
+// TODO: Implement product creation
+//    POST /api/v1/products
+
 // @desc  Fetch all products of a merchant
 // @route GET /api/v1/products
 async function getProducts(req, res, next) {
