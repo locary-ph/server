@@ -21,7 +21,7 @@ async function createOrder(req, res, next) {
     const order = new Order({
       merchantId: req.user._id,
       buyer,
-      items, // TODO: refactor to only include relevant fields
+      items, // TODO(#3): refactor to only include relevant fields
       deliveryOption,
       orderAmount,
       quantity,
