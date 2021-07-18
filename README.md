@@ -1,4 +1,4 @@
-# Express API Starter
+# Locary API
 
 Includes API Server utilities:
 
@@ -15,8 +15,6 @@ Development utilities:
   * nodemon is a tool that helps develop node.js based applications by automatically restarting the node application when file changes in the directory are detected.
 * [eslint](https://www.npmjs.com/package/eslint)
   * ESLint is a tool for identifying and reporting on patterns found in ECMAScript/JavaScript code.
-* [mocha](https://www.npmjs.com/package/mocha)
-  * ☕️ Simple, flexible, fun JavaScript test framework for Node.js & The Browser ☕️
 * [supertest](https://www.npmjs.com/package/supertest)
   * HTTP assertions made easy via superagent.
 
@@ -43,3 +41,7 @@ npm run test
 ```
 npm run dev
 ```
+
+## Resources
+
+Starter code: https://github.com/w3cj/express-api-starter.git
