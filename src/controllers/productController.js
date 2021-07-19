@@ -12,6 +12,34 @@ async function getProducts(req, res, next) {
   res.json(products);
 }
 
+// @desc  Fetch all products of a merchant
+// @route POST /api/v1/products
+async function createProduct(req, res, next) {
+  const {
+    imageUrls,
+    name,
+    price,
+    description,
+    thumbnailUrl,
+    qty
+  } = req.body;
+
+  const product = new Product({
+    merchantId: req.user._id,
+    imageUrls,
+    name,
+    price,
+    description,
+    thumbnailUrl,
+    qty
+  });
+
+  const createdProduct = await product.save();
+
+  res.status(201);
+  res.json({ message: "Order placed" });
+}
+
 // @desc  Fetch single product
 // @route GET /api/v1/products/:id
 async function getProductById(req, res, next) {
@@ -27,5 +55,6 @@ async function getProductById(req, res, next) {
 
 module.exports = {
   getProducts,
-  getProductById
+  getProductById,
+  createProduct
 };
