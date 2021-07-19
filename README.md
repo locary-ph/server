@@ -45,3 +45,4 @@ npm run dev
 ## Resources
 
 Starter code: https://github.com/w3cj/express-api-starter.git
+Testing: https://fullstackopen.com/en/part4/testing_the_backend
