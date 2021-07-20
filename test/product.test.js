@@ -3,8 +3,12 @@ const request = require("supertest");
 const app = require("../src/app.js");
 
 const Product = require("../src/models/product.js");
+const Merchant = require("../src/models/merchant.js");
 
 const api = request(app);
+
+// TODO: Test the flow of creating and retrieving products
+// TODO: Extract mock data to its own file
 
 const initialProducts = [
   {
@@ -43,37 +47,71 @@ const initialProducts = [
 
 let token = "Bearer ";
 
-beforeAll((done) => {
-  const deets = {
-    email: "millerdavidson@rockabye.com",
-    password: "bacon"
+beforeAll(async () => {
+  await Merchant.deleteMany({});
+
+  const initialUser = {
+    deliveryAreas: {
+      Cebu: ["cebu", "Talisay"],
+      Bohol: []
+    },
+    email: "example@email.com",
+    password: "1234",
+    shopName: "test",
+    firstName: "Juan",
+    lastName: "dela Cruz",
+    shopUrl: "https://locary.ph/shop/test"
   };
 
-  api
-    .post("/api/v1/auth/login")
-    .send(deets)
-    .end((err, res) => {
-      token += res.body.token;
-      done();
-    });
+  const res = await api
+    .post("/api/v1/auth/signup")
+    .send(initialUser);
+
+  token += res.body.token;
 });
 
 beforeEach(async () => {
   await Product.deleteMany({});
 
-  initialProducts.forEach(async (product) => {
-    const productObject = new Product(product);
-    await productObject.save();
+  let p = new Product(initialProducts[0]);
+  await p.save();
+  p = new Product(initialProducts[1]);
+  await p.save();
+});
+
+describe("POST /products", () => {
+  test("Create a new product", async () => {
+    const product = {
+      imageUrls: [
+        "http://placehold.it/32x32"
+      ],
+      name: "test",
+      price: 100,
+      description: "test ra ni nako",
+      thumbnailUrl: "http://placehold.it/32x32",
+      qty: 10
+    };
+
+    await api
+      .post("/api/v1/products")
+      .set("Authorization", token)
+      .send(product)
+      .expect(201)
+      .expect("Content-Type", /application\/json/);
   });
 });
 
-test("returns json", async () => {
-  await api
-    .get("/api/v1/products")
-    .set("Authorization", token)
-    .expect(200)
-    .expect("Content-Type", /application\/json/);
-}, 100000);
+describe("GET /products", () => {
+  test("should return correct number of products", async () => {
+    const res = await api
+      .get("/api/v1/products")
+      .set("Authorization", token)
+      .expect(200)
+      .expect("Content-Type", /application\/json/);
+
+    expect(res.body.length).toBe(initialProducts.length);
+  });
+});
 
 afterAll(async () => {
   await mongoose.connection.close();

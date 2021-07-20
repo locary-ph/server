@@ -1,8 +1,6 @@
 const Product = require("../models/product");
 
 // TODO(#2): Write tests for product controller
-// TODO(#4): Implement product creation
-//    POST /api/v1/products
 
 // @desc  Fetch all products of a merchant
 // @route GET /api/v1/products
@@ -37,7 +35,7 @@ async function createProduct(req, res, next) {
   const createdProduct = await product.save();
 
   res.status(201);
-  res.json({ message: "Order placed" });
+  res.json({ message: "Product created" });
 }
 
 // @desc  Fetch single product
