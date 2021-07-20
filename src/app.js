@@ -5,10 +5,6 @@ const cors = require("cors");
 const connectDB = require("./config/db");
 require("express-async-errors");
 
-if (process.env.NODE_ENV !== "production") {
-  require("dotenv").config();
-}
-
 connectDB();
 
 const middlewares = require("./middlewares");
@@ -23,9 +19,7 @@ app.use(cors());
 app.use(express.json());
 
 app.get("/", (req, res) => {
-  res.json({
-    message: "API running"
-  });
+  res.json({ message: "API running" });
 });
 
 app.use("/api/v1", api);
