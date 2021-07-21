@@ -99,6 +99,67 @@ describe("POST /products", () => {
       .expect(201)
       .expect("Content-Type", /application\/json/);
   });
+
+  test("should fail without name value", async () => {
+    const product = {
+      imageUrls: [
+        "http://placehold.it/32x32"
+      ],
+      price: 100,
+      description: "test ra ni nako",
+      thumbnailUrl: "http://placehold.it/32x32",
+      qty: 10
+    };
+
+    await api
+      .post("/api/v1/products")
+      .set("Authorization", token)
+      .send(product)
+      .expect(500);
+  });
+
+  test("should fail if no price is provided", async () => {
+    const product = {
+      imageUrls: [
+        "http://placehold.it/32x32"
+      ],
+      name: "test",
+      description: "test ra ni nako",
+      thumbnailUrl: "http://placehold.it/32x32",
+      qty: 10
+    };
+
+    await api
+      .post("/api/v1/products")
+      .set("Authorization", token)
+      .send(product)
+      .expect(500);
+  });
+  // TODO: create a product without thumbnail
+  test("should fail if product name already exists", async () => {
+    const product = {
+      merchantId: mongoose.Types.ObjectId(),
+      imageUrls: [
+        "http://placehold.it/32x32"
+      ],
+      name: "test",
+      price: 100,
+      description: "test ra ni nako",
+      thumbnailUrl: "http://placehold.it/32x32",
+      qty: 10
+    };
+
+    const newProduct = new Product(product);
+    await newProduct.save();
+
+    const res = await api
+      .post("/api/v1/products")
+      .set("Authorization", token)
+      .send(product)
+      .expect(409);
+
+    expect(res.body.message).toBe("Product already exists");
+  });
 });
 
 describe("GET /products", () => {
@@ -109,7 +170,7 @@ describe("GET /products", () => {
       .expect(200)
       .expect("Content-Type", /application\/json/);
 
-    expect(res.body.length).toBe(initialProducts.length);
+    expect(res.body.length).toBe(0);
   });
 });
 
