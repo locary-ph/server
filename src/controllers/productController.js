@@ -22,6 +22,12 @@ async function createProduct(req, res, next) {
     qty
   } = req.body;
 
+  const productExists = await Product.find({ name });
+  if (productExists.length) {
+    res.status(409);
+    throw new Error("Product already exists");
+  }
+
   const product = new Product({
     merchantId: req.user._id,
     imageUrls,
