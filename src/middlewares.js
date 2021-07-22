@@ -28,7 +28,6 @@ async function authorize(req, res, next) {
 
       const exclude = "-password -__v";
       req.user = await Merchant.findById(decoded._id).select(exclude);
-      if (process.env.NODE_ENV === "development") console.log("User: ", req.user);
 
       next();
     } catch (e) {

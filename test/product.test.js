@@ -17,7 +17,6 @@ const initialProducts = [
     price: 1058.55,
     description: "magna fugiat sint consectetur occaecat non mollit eiusmod nostrud quis",
     thumbnailUrl: "http://placehold.it/32x32",
-    merchantId: "60cdc06ec2b3a908e2413b6b",
     imageUrls: [
       "http://placehold.it/32x32",
       "http://placehold.it/32x32",
@@ -33,7 +32,6 @@ const initialProducts = [
     price: 2704.77,
     description: "nisi ad commodo adipisicing voluptate laborum fugiat Lorem excepteur esse",
     thumbnailUrl: "http://placehold.it/32x32",
-    merchantId: "60cdc06ec2b3a908e2413b6b",
     imageUrls: [
       "http://placehold.it/32x32",
       "http://placehold.it/32x32",
@@ -46,6 +44,7 @@ const initialProducts = [
 ];
 
 let token = "Bearer ";
+let merchantId;
 
 beforeAll(async () => {
   await Merchant.deleteMany({});
@@ -68,14 +67,21 @@ beforeAll(async () => {
     .send(initialUser);
 
   token += res.body.token;
+  merchantId = res.body._id;
 });
 
 beforeEach(async () => {
   await Product.deleteMany({});
 
-  let p = new Product(initialProducts[0]);
+  let p = new Product({
+    ...initialProducts[0],
+    merchantId
+  });
   await p.save();
-  p = new Product(initialProducts[1]);
+  p = new Product({
+    ...initialProducts[1],
+    merchantId
+  });
   await p.save();
 });
 
@@ -170,7 +176,7 @@ describe("GET /products", () => {
       .expect(200)
       .expect("Content-Type", /application\/json/);
 
-    expect(res.body.length).toBe(0);
+    expect(res.body.length).toBe(initialProducts.length);
   });
 });
 
