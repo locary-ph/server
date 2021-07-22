@@ -4,44 +4,11 @@ const app = require("../src/app.js");
 
 const Product = require("../src/models/product.js");
 const Merchant = require("../src/models/merchant.js");
+const initialProducts = require("./mock/initialProducts.js");
 
 const api = request(app);
 
 // TODO: Test the flow of creating and retrieving products
-// TODO: Extract mock data to its own file
-
-const initialProducts = [
-  {
-    _id: "60c870367f224b47dc4ac0d6",
-    name: "officia eiusmod",
-    price: 1058.55,
-    description: "magna fugiat sint consectetur occaecat non mollit eiusmod nostrud quis",
-    thumbnailUrl: "http://placehold.it/32x32",
-    imageUrls: [
-      "http://placehold.it/32x32",
-      "http://placehold.it/32x32",
-      "http://placehold.it/32x32",
-      "http://placehold.it/32x32",
-      "http://placehold.it/32x32"
-    ],
-    qty: 19
-  },
-  {
-    _id: "60c87036771b07e7bc8381a9",
-    name: "eu do",
-    price: 2704.77,
-    description: "nisi ad commodo adipisicing voluptate laborum fugiat Lorem excepteur esse",
-    thumbnailUrl: "http://placehold.it/32x32",
-    imageUrls: [
-      "http://placehold.it/32x32",
-      "http://placehold.it/32x32",
-      "http://placehold.it/32x32",
-      "http://placehold.it/32x32",
-      "http://placehold.it/32x32"
-    ],
-    qty: 16
-  }
-];
 
 let token = "Bearer ";
 let merchantId;
@@ -98,12 +65,13 @@ describe("POST /products", () => {
       qty: 10
     };
 
-    await api
+    const res = await api
       .post("/api/v1/products")
       .set("Authorization", token)
       .send(product)
       .expect(201)
       .expect("Content-Type", /application\/json/);
+    // expect(res.body.merchantId).toEqual(merchantId);
   });
 
   test("should fail without name value", async () => {
@@ -179,6 +147,20 @@ describe("GET /products", () => {
     expect(res.body.length).toBe(initialProducts.length);
   });
 });
+
+// describe("GET /products/:id", () => {
+//  test("should return one product", async () => {
+//    const products = await Product.find({});
+//
+//    const res = await api
+//      .get(`/api/v1/products/${products[0]._id}`)
+//      .set("Authorization", token)
+//      .expect(200)
+//      .expect("Content-Type", /application\/json/);
+//
+//    expect(res.body).toHaveLength(1);
+//  });
+// });
 
 afterAll(async () => {
   await mongoose.connection.close();
