@@ -7,7 +7,7 @@
     "start": "cross-env NODE_ENV=production node src/index.js",
     "dev": "cross-env NODE_ENV=development nodemon src/index.js",
     "lint": "eslint --fix .",
-    "test": "cross-env NODE_ENV=test jest --verbose --runInBand" 
+    "test": "cross-env NODE_ENV=test jest --verbose --runInBand"
   },
   "keywords": [],
   "license": "MIT",
@@ -19,6 +19,7 @@
     "express": "^4.17.1",
     "express-async-errors": "^3.1.1",
     "helmet": "^4.6.0",
+    "imagekit": "^3.2.0",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.13.3",
     "morgan": "^1.10.0"
