@@ -1,4 +1,5 @@
 const express = require("express");
+const imagekit = require("../imagekit");
 
 const products = require("./products");
 const merchants = require("./merchants");
@@ -8,6 +9,11 @@ const order = require("./order");
 const middlewares = require("../middlewares");
 
 const router = express.Router();
+
+router.get("/imagekit/auth", (req, res) => {
+  const authParams = imagekit.getAuthenticationParameters();
+  res.send(authParams);
+});
 
 router.use("/auth", auth);
 router.use(middlewares.authorize);
