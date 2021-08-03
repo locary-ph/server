@@ -12,7 +12,6 @@ const api = request(app);
 
 const initialProducts = [
   {
-    _id: "60c870367f224b47dc4ac0d6",
     name: "officia eiusmod",
     price: 1058.55,
     description: "magna fugiat sint consectetur occaecat non mollit eiusmod nostrud quis",
@@ -28,7 +27,6 @@ const initialProducts = [
     qty: 19
   },
   {
-    _id: "60c87036771b07e7bc8381a9",
     name: "eu do",
     price: 2704.77,
     description: "nisi ad commodo adipisicing voluptate laborum fugiat Lorem excepteur esse",
@@ -60,7 +58,7 @@ beforeAll(async () => {
     shopName: "test",
     firstName: "Juan",
     lastName: "dela Cruz",
-    shopUrl: "https://locary.ph/shop/test"
+    shopUrl: "test"
   };
 
   const res = await api
@@ -73,10 +71,12 @@ beforeAll(async () => {
 beforeEach(async () => {
   await Product.deleteMany({});
 
-  let p = new Product(initialProducts[0]);
-  await p.save();
-  p = new Product(initialProducts[1]);
-  await p.save();
+  for (const product of initialProducts) {
+    await api
+      .post("/api/v1/products")
+      .set("Authorization", token)
+      .send(product);
+  }
 });
 
 describe("POST /products", () => {

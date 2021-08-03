@@ -16,9 +16,8 @@ router.get("/imagekit/auth", (req, res) => {
 });
 
 router.use("/auth", auth);
-router.use(middlewares.authorize);
+router.use("/orders", order);
 router.use("/products", products);
 router.use("/merchants", merchants);
-router.use("/orders", order);
 
 module.exports = router;
