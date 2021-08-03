@@ -56,10 +56,12 @@ describe("GET /merchant/shop", () => {
       .expect("Content-Type", /application\/json/);
   });
 
-  test("it respond an array with two objects", async () => {
-    await api
+  test("it responds an array with two objects", async () => {
+    const res = await api
       .get("/api/v1/merchants/shop?route=test")
       .expect(200)
       .expect("Content-Type", /application\/json/);
+
+    expect(res.body.length).toBe(2);
   });
 });
