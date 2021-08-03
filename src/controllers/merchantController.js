@@ -1,6 +1,8 @@
 const Merchant = require("../models/merchant");
 const Product = require("../models/product");
 
+// @desc  Fetch merchant information and merchant's prodcuts
+// @route GET /api/v1/merchants/shop?route=shopRoute
 async function getShop(req, res) {
   if (req.query.route) {
     const { route } = req.query;
