@@ -44,5 +44,6 @@ npm run dev
 
 ## Resources
 
-Starter code: https://github.com/w3cj/express-api-starter.git
-Testing: https://fullstackopen.com/en/part4/testing_the_backend
+- Starter code: https://github.com/w3cj/express-api-starter.git
+- Testing: https://fullstackopen.com/en/part4/testing_the_backend
+- Using async/await with `forEach`: [Stackoverflow post](https://stackoverflow.com/questions/37576685/using-async-await-with-a-foreach-loop)
