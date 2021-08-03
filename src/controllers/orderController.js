@@ -39,7 +39,7 @@ async function createOrder(req, res, next) {
 // @desc Fetch all orders of a merchant
 // @route GET /api/v1/orders
 async function getOrders(req, res, next) {
-  const orders = await Order.find({});
+  const orders = await Order.find({ merchantId: req.user._id });
 
   res.json(orders);
 }
