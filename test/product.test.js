@@ -154,7 +154,7 @@ describe("GET /products/:id", () => {
       .get("/api/v1/products")
       .set("Authorization", token);
 
-    const [_id] = res.body[0];
+    const { _id } = res.body[0];
 
     const { body } = await api
       .get(`/api/v1/products/${_id}`)
