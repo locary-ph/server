@@ -6,8 +6,6 @@ const merchants = require("./merchants");
 const auth = require("./auth");
 const order = require("./order");
 
-const middlewares = require("../middlewares");
-
 const router = express.Router();
 
 router.get("/imagekit/auth", (req, res) => {

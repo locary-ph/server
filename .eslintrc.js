@@ -2,6 +2,11 @@ module.exports = {
   env: { jest: true, },
   extends: "airbnb-base",
   rules: {
+    "prefer-destructuring": ["error", {
+      object: true,
+      array: false
+    }],
+    "no-console": 0,
     "comma-dangle": 0,
     "no-underscore-dangle": 0,
     "no-param-reassign": 0,

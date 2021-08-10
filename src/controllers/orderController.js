@@ -4,7 +4,7 @@ const Order = require("../models/order");
 
 // @desc Create new order
 // @route POST /api/v1/orders
-async function createOrder(req, res, next) {
+async function createOrder(req, res) {
   const {
     buyer,
     items,
@@ -31,14 +31,13 @@ async function createOrder(req, res, next) {
     const createdOrder = await order.save();
 
     res.status(201);
-    // res.json(createdOrder);
-    res.json({ message: "Order placed" });
+    res.json(createdOrder);
   }
 }
 
 // @desc Fetch all orders of a merchant
 // @route GET /api/v1/orders
-async function getOrders(req, res, next) {
+async function getOrders(req, res) {
   const orders = await Order.find({ merchantId: req.user._id });
 
   res.json(orders);
@@ -46,7 +45,7 @@ async function getOrders(req, res, next) {
 
 // @desc Fetch 5 most recent orders
 // @route GET /api/v1/orders/recent
-async function getRecentOrders(req, res, next) {
+async function getRecentOrders(req, res) {
   const orders = await Order.find(
     { merchantId: req.user._id },
     "buyer.firstName buyer.lastName items.product orderAmount orderStatus"
@@ -57,7 +56,7 @@ async function getRecentOrders(req, res, next) {
 
 // @desc Fetch a single order
 // @route GET /api/v1/orders/:id
-async function getOrderById(req, res, next) {
+async function getOrderById(req, res) {
   const order = await Order.findById(req.params.id);
 
   if (order) {

@@ -1,5 +1,5 @@
 const ImageKit = require("imagekit");
-const config = require("./utils/config.js");
+const config = require("./utils/config");
 
 const imagekit = new ImageKit({
   urlEndpoint: config.IMAGEKIT_URL_ENDPOINT,
