@@ -9,7 +9,10 @@ const ProductSchema = new Schema({
     ref: "Merchant",
     required: true
   },
-  name: { type: String, required: true },
+  name: {
+    type: String,
+    required: true
+  },
   price: {
     type: Number,
     min: 0,
