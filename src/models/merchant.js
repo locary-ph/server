@@ -22,11 +22,11 @@ const MerchantSchema = new Schema({
   shopUrl: defaultOptions
 }, { timestamps: true });
 
-MerchantSchema.methods.isCorrectPassword = async function (enteredPassword) {
-  return await bcrypt.compare(enteredPassword, this.password);
+MerchantSchema.methods.isCorrectPassword = async function isCorrectPassword(enteredPassword) {
+  return bcrypt.compare(enteredPassword, this.password);
 };
 
-MerchantSchema.pre("save", async function (next) {
+MerchantSchema.pre("save", async function save(next) {
   if (!this.isModified("password")) {
     next();
   }

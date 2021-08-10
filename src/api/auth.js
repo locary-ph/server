@@ -6,7 +6,7 @@ const router = express.Router();
 
 // @desc  Auth merchant and get token
 // @route POST /api/v1/auth/login
-router.post("/login", async (req, res, next) => {
+router.post("/login", async (req, res) => {
   const { email, password } = req.body;
 
   const user = await Merchant.findOne({ email });
@@ -27,7 +27,7 @@ router.post("/login", async (req, res, next) => {
 
 // @desc  Register a new merchant
 // @route POST /api/v1/auth/signup
-router.post("/signup", async (req, res, next) => {
+router.post("/signup", async (req, res) => {
   const userExists = await Merchant.findOne({ email: req.body.email });
   if (userExists) {
     res.status(400);

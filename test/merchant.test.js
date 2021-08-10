@@ -1,8 +1,7 @@
 const request = require("supertest");
-const app = require("../src/app.js");
+const app = require("../src/app");
 
-const Product = require("../src/models/product.js");
-const Merchant = require("../src/models/merchant.js");
+const Merchant = require("../src/models/merchant");
 
 const api = request(app);
 
@@ -22,14 +21,14 @@ beforeAll(async () => {
     shopUrl: "test"
   };
 
-  const res = await api
+  await api
     .post("/api/v1/auth/signup")
     .send(initialUser);
 });
 
 describe("GET /merchant/shop", () => {
   test("it responds with status code 200", async () => {
-    const res = await api
+    await api
       .get("/api/v1/merchants/shop?route=test")
       .expect(200)
       .expect("Content-Type", /application\/json/);

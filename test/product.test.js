@@ -1,10 +1,10 @@
 const mongoose = require("mongoose");
 
 const request = require("supertest");
-const app = require("../src/app.js");
+const app = require("../src/app");
 
-const Product = require("../src/models/product.js");
-const Merchant = require("../src/models/merchant.js");
+const Product = require("../src/models/product");
+const Merchant = require("../src/models/merchant");
 
 const api = request(app);
 
@@ -70,6 +70,8 @@ beforeAll(async () => {
 beforeEach(async () => {
   await Product.deleteMany({});
 
+  /* eslint-disable no-restricted-syntax */
+  /* eslint-disable  no-await-in-loop */
   for (const product of initialProducts) {
     await api
       .post("/api/v1/products")
@@ -91,7 +93,7 @@ describe("POST /products", () => {
       qty: 10
     };
 
-    const res = await api
+    await api
       .post("/api/v1/products")
       .set("Authorization", token)
       .send(product)
@@ -147,17 +149,13 @@ describe("GET /products", () => {
 });
 
 describe("GET /products/:id", () => {
-  let _id;
-
-  beforeEach(async () => {
+  test("should respond with a valid product", async () => {
     const res = await api
       .get("/api/v1/products")
       .set("Authorization", token);
 
-    _id = res.body[0]._id;
-  });
+    const [_id] = res.body[0];
 
-  test("should respond with a valid product", async () => {
     const { body } = await api
       .get(`/api/v1/products/${_id}`)
       .expect(200)
@@ -165,20 +163,18 @@ describe("GET /products/:id", () => {
 
     const descriptions = initialProducts.map((p) => p.description);
 
-    expect(descriptions).toContain(
-      "magna fugiat sint consectetur occaecat non mollit eiusmod nostrud quis"
-    );
+    expect(descriptions).toContain(body.description);
   });
 
   test("respond 400 with invalid id", async () => {
-    const { body } = await api
+    await api
       .get("/api/v1/products/23")
       .expect(400)
       .expect("Content-Type", /application\/json/);
   });
 
   test("not found product", async () => {
-    const { body } = await api
+    await api
       .get("/api/v1/products/6111fa1bc043bb31cc6c3da0")
       .expect(404)
       .expect("Content-Type", /application\/json/);

@@ -4,7 +4,7 @@ const Product = require("../models/product");
 
 // @desc  Fetch all products of a merchant
 // @route GET /api/v1/products
-async function getProducts(req, res, next) {
+async function getProducts(req, res) {
   const products = await Product.find({ merchantId: req.user._id });
 
   res.json(products);
@@ -12,7 +12,7 @@ async function getProducts(req, res, next) {
 
 // @desc  Fetch all products of a merchant
 // @route POST /api/v1/products
-async function createProduct(req, res, next) {
+async function createProduct(req, res) {
   const {
     imageUrls,
     name,
@@ -41,12 +41,12 @@ async function createProduct(req, res, next) {
   const createdProduct = await product.save();
 
   res.status(201);
-  res.json({ message: "Product created" });
+  res.json(createdProduct);
 }
 
 // @desc  Fetch single product
 // @route GET /api/v1/products/:id
-async function getProductById(req, res, next) {
+async function getProductById(req, res) {
   const product = await Product.findById(req.params.id);
 
   if (product) {

@@ -6,7 +6,8 @@
   "scripts": {
     "start": "cross-env NODE_ENV=production node src/index.js",
     "dev": "cross-env NODE_ENV=development nodemon src/index.js",
-    "lint": "eslint --fix .",
+    "lint": "eslint .",
+    "lint:watch": "esw -w",
     "test": "cross-env NODE_ENV=test jest --verbose --runInBand --forceExit"
   },
   "keywords": [],
@@ -29,6 +30,7 @@
     "eslint": "^7.31.0",
     "eslint-config-airbnb-base": "^14.2.1",
     "eslint-plugin-import": "^2.23.4",
+    "eslint-watch": "^7.0.0",
     "jest": "^27.0.6",
     "nodemon": "^2.0.12",
     "supertest": "^6.1.3"
