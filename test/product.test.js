@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+
 const request = require("supertest");
 const app = require("../src/app.js");
 
@@ -16,7 +17,6 @@ const initialProducts = [
     price: 1058.55,
     description: "magna fugiat sint consectetur occaecat non mollit eiusmod nostrud quis",
     thumbnailUrl: "http://placehold.it/32x32",
-    merchantId: "60cdc06ec2b3a908e2413b6b",
     imageUrls: [
       "http://placehold.it/32x32",
       "http://placehold.it/32x32",
@@ -31,7 +31,6 @@ const initialProducts = [
     price: 2704.77,
     description: "nisi ad commodo adipisicing voluptate laborum fugiat Lorem excepteur esse",
     thumbnailUrl: "http://placehold.it/32x32",
-    merchantId: "60cdc06ec2b3a908e2413b6b",
     imageUrls: [
       "http://placehold.it/32x32",
       "http://placehold.it/32x32",
@@ -80,14 +79,14 @@ beforeEach(async () => {
 });
 
 describe("POST /products", () => {
-  test("Create a new product", async () => {
+  test("a valid product can be added", async () => {
     const product = {
       imageUrls: [
         "http://placehold.it/32x32"
       ],
       name: "test",
       price: 100,
-      description: "test ra ni nako",
+      description: "test description",
       thumbnailUrl: "http://placehold.it/32x32",
       qty: 10
     };
@@ -98,6 +97,37 @@ describe("POST /products", () => {
       .send(product)
       .expect(201)
       .expect("Content-Type", /application\/json/);
+
+    const products = await api.get("/api/v1/products").set("Authorization", token);
+
+    const descriptions = products.body.map((p) => p.description);
+
+    expect(products.body).toHaveLength(initialProducts.length + 1);
+    expect(descriptions).toContain(
+      "test description"
+    );
+  });
+
+  test("product without name is not added", async () => {
+    const newProduct = {
+      imageUrls: [
+        "http://placehold.it/32x32"
+      ],
+      price: 100,
+      description: "test description",
+      thumbnailUrl: "http://placehold.it/32x32",
+      qty: 10
+    };
+
+    await api
+      .post("/api/v1/products")
+      .send(newProduct)
+      .set("Authorization", token)
+      .expect(400);
+
+    const products = await api.get("/api/v1/products").set("Authorization", token);
+
+    expect(products.body).toHaveLength(initialProducts.length);
   });
 });
 
@@ -110,6 +140,45 @@ describe("GET /products", () => {
       .expect("Content-Type", /application\/json/);
 
     expect(res.body.length).toBe(initialProducts.length);
+  });
+});
+
+describe("GET /products/:id", () => {
+  let _id;
+
+  beforeEach(async () => {
+    const res = await api
+      .get("/api/v1/products")
+      .set("Authorization", token);
+
+    _id = res.body[0]._id;
+  });
+
+  test("should respond with a valid product", async () => {
+    const { body } = await api
+      .get(`/api/v1/products/${_id}`)
+      .expect(200)
+      .expect("Content-Type", /application\/json/);
+
+    const descriptions = initialProducts.map((p) => p.description);
+
+    expect(descriptions).toContain(
+      "magna fugiat sint consectetur occaecat non mollit eiusmod nostrud quis"
+    );
+  });
+
+  test("respond 400 with invalid id", async () => {
+    const { body } = await api
+      .get("/api/v1/products/23")
+      .expect(400)
+      .expect("Content-Type", /application\/json/);
+  });
+
+  test("not found product", async () => {
+    const { body } = await api
+      .get("/api/v1/products/6111fa1bc043bb31cc6c3da0")
+      .expect(404)
+      .expect("Content-Type", /application\/json/);
   });
 });
 

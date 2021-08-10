@@ -10,7 +10,13 @@ function notFound(req, res, next) {
 /* eslint-disable no-unused-vars */
 function errorHandler(err, req, res, next) {
   /* eslint-enable no-unused-vars */
-  const statusCode = res.statusCode !== 200 ? res.statusCode : 500;
+  console.log(err);
+  let statusCode = res.statusCode !== 200 ? res.statusCode : 500;
+
+  if (err.name === "ValidationError" || err.name === "CastError") {
+    statusCode = 400;
+  }
+
   res.status(statusCode);
   res.json({
     message: err.message,
