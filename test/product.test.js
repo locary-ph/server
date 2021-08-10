@@ -91,7 +91,7 @@ describe("POST /products", () => {
       qty: 10
     };
 
-    await api
+    const res = await api
       .post("/api/v1/products")
       .set("Authorization", token)
       .send(product)
@@ -129,6 +129,9 @@ describe("POST /products", () => {
 
     expect(products.body).toHaveLength(initialProducts.length);
   });
+
+  // TODO: create a product without thumbnail
+  // TODO: should fail if product name already exists
 });
 
 describe("GET /products", () => {
