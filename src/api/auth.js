@@ -13,10 +13,14 @@ router.post("/login", async (req, res) => {
 
   if (user && (await user.isCorrectPassword(password))) {
     res.json({
-      _id: user._id,
-      email: user.email,
-      shopName: user.shopName,
-      shopUrl: user.shopUrl,
+      user: {
+        _id: user._id,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+        shopName: user.shopName,
+        shopUrl: user.shopUrl,
+      },
       token: generateToken(user._id),
     });
   } else {
