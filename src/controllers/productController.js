@@ -1,4 +1,5 @@
 const Product = require("../models/product");
+const helper = require("../utils/helper");
 
 // TODO(#2): Write tests for product controller
 
@@ -49,16 +50,20 @@ async function createProduct(req, res) {
 async function getProductById(req, res) {
   const product = await Product.findById(req.params.id);
 
-  if (product) {
-    res.json(product);
-  } else {
-    res.status(404);
-    throw new Error("Product not found");
-  }
+  helper.checkDocument(res, product, product);
+}
+
+// @desc  Delete single product
+// @route DELETE /api/v1/products/:id
+async function deleteProductById(req, res) {
+  const product = await Product.findByIdAndRemove(req.params.id);
+
+  helper.checkDocument(res, product, { message: `${product.name} deleted!` });
 }
 
 module.exports = {
   getProducts,
   getProductById,
-  createProduct
+  createProduct,
+  deleteProductById
 };

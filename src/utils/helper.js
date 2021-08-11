@@ -1,6 +1,6 @@
 // @param query - returned query by mongoose
 // @param object - object to return if query is truthy
-function checkDocument(query, object) {
+function checkDocument(res, query, object) {
   if (query) {
     res.json(object);
   } else {
