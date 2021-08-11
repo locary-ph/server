@@ -25,6 +25,17 @@ function errorHandler(err, req, res, next) {
 }
 
 async function authorize(req, res, next) {
+  // the request is for GET /products and req came from storefront
+  // this allows public requests, we should find a better solution for this. (TODO)
+  if (
+    (req.baseUrl + req.path).includes("/api/v1/products")
+    && req.query.merchantId
+    && req.method === "GET"
+  ) {
+    // skip authorization
+    return next();
+  }
+
   let token;
 
   if (req.headers.authorization && req.headers.authorization.startsWith("Bearer")) {
@@ -34,8 +45,6 @@ async function authorize(req, res, next) {
 
       const exclude = "-password -__v";
       req.user = await Merchant.findById(decoded._id).select(exclude);
-
-      next();
     } catch (e) {
       console.error(e);
       res.status(401);
@@ -47,6 +56,8 @@ async function authorize(req, res, next) {
     res.status(401);
     throw new Error("Not authorized, no token found");
   }
+
+  return next();
 }
 
 module.exports = {

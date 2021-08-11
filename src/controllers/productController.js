@@ -4,9 +4,14 @@ const helper = require("../utils/helper");
 // TODO(#2): Write tests for product controller
 
 // @desc  Fetch all products of a merchant
-// @route GET /api/v1/products
+// @route GET /api/v1/products or /api/v1/products?merchantId=x909sampleIdx909
 async function getProducts(req, res) {
-  const products = await Product.find({ merchantId: req.user._id });
+  // get the logged in user's id: request from the dashbord
+  // OR
+  // the queried id: req from storefront
+  const merchantId = req.query.merchantId || req.user._id;
+
+  const products = await Product.find({ merchantId });
 
   res.json(products);
 }
