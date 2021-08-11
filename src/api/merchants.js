@@ -4,7 +4,7 @@ const router = express.Router();
 
 const merchantController = require("../controllers/merchantController");
 
-// GET /merchants/shop?shopRoute=sunt-est
-router.get("/shop", merchantController.getShop);
+// GET /merchants?shop=sunt-est
+router.get("/", merchantController.getShop);
 
 module.exports = router;
