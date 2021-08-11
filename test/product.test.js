@@ -181,6 +181,60 @@ describe("GET /products/:id", () => {
   });
 });
 
+describe("DELETE /products/:id", () => {
+  test("message response", async () => {
+    const newProduct = {
+      imageUrls: [
+        "http://placehold.it/32x32"
+      ],
+      name: "test",
+      price: 100,
+      description: "test description",
+      thumbnailUrl: "http://placehold.it/32x32",
+      qty: 10
+    };
+
+    await api
+      .post("/api/v1/products")
+      .send(newProduct)
+      .set("Authorization", token);
+
+    const toDelete = await Product.findOne({ name: newProduct.name });
+
+    const res = await api
+      .delete(`/api/v1/products/${toDelete._id}`)
+      .set("Authorization", token)
+      .expect(200)
+      .expect("Content-Type", /application\/json/);
+
+    expect(res.body.message).toContain("test deleted!");
+  });
+
+  test("delete a single product", async () => {
+    let res = await api
+      .get("/api/v1/products")
+      .set("Authorization", token);
+
+    const lengthBefore = res.body.length;
+
+    const toDelete = await Product.findOne({ name: initialProducts[0].name });
+
+    await api
+      .delete(`/api/v1/products/${toDelete._id}`)
+      .set("Authorization", token)
+      .expect(200)
+      .expect("Content-Type", /application\/json/);
+
+    res = await api
+      .get("/api/v1/products")
+      .set("Authorization", token);
+
+    const lengthAfter = res.body.length;
+
+    expect(lengthAfter).toBe(lengthBefore - 1);
+  });
+});
+
 afterAll(async () => {
   await mongoose.connection.close();
 });
