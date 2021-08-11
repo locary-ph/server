@@ -146,6 +146,18 @@ describe("GET /products", () => {
 
     expect(res.body.length).toBe(initialProducts.length);
   });
+
+  test("without sending auth token", async () => {
+    const user = await Merchant.findOne({ firstName: "Juan" });
+
+    const res = await api
+      .get("/api/v1/products?")
+      .query({ merchantId: user._id.toString() })
+      .expect(200)
+      .expect("Content-Type", /application\/json/);
+
+    expect(res.body[0].merchantId).toBe(user._id.toString());
+  });
 });
 
 describe("GET /products/:id", () => {
