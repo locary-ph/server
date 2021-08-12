@@ -50,6 +50,35 @@ async function createProduct(req, res) {
   res.json(createdProduct);
 }
 
+// @desc  Edit a product
+// @route PUT /api/v1/products/:id
+async function updateProduct(req, res) {
+  const {
+    name,
+    price,
+    description,
+    thumbnailUrl,
+    qty,
+    _id
+  } = req.body;
+
+  const options = {
+    new: true,
+    runValidators: true
+  };
+
+  // return updated product
+  const product = await Product.findByIdAndUpdate(_id, {
+    name,
+    price,
+    description,
+    thumbnailUrl,
+    qty,
+  }, options);
+
+  helper.checkDocument(res, product, product);
+}
+
 // @desc  Fetch single product
 // @route GET /api/v1/products/:id
 async function getProductById(req, res) {
@@ -70,5 +99,6 @@ module.exports = {
   getProducts,
   getProductById,
   createProduct,
-  deleteProductById
+  deleteProductById,
+  updateProduct
 };
