@@ -50,6 +50,40 @@ async function createProduct(req, res) {
   res.json(createdProduct);
 }
 
+// @desc  Edit a product
+// @route PUT /api/v1/products/:id
+async function updateProduct(req, res) {
+  if (req.body.product) {
+    const {
+      name,
+      price,
+      description,
+      thumbnailUrl,
+      qty,
+      _id
+    } = req.body.product;
+
+    const options = {
+      new: true,
+      runValidators: true
+    };
+
+    // return updated product
+    const product = await Product.findByIdAndUpdate(_id, {
+      name,
+      price,
+      description,
+      thumbnailUrl,
+      qty,
+    }, options);
+
+    helper.checkDocument(res, product, product);
+  } else {
+    res.status(422);
+    throw new Error("Cannot process entity");
+  }
+}
+
 // @desc  Fetch single product
 // @route GET /api/v1/products/:id
 async function getProductById(req, res) {
@@ -70,5 +104,6 @@ module.exports = {
   getProducts,
   getProductById,
   createProduct,
-  deleteProductById
+  deleteProductById,
+  updateProduct
 };

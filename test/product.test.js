@@ -247,6 +247,60 @@ describe("DELETE /products/:id", () => {
   });
 });
 
+describe("PUT /products/:id", () => {
+  test("update a valid product", async () => {
+    const products = await Product.find({}).lean();
+
+    const toUpdate = {
+      name: "updated name",
+      price: 0,
+      description: "description updated",
+      thumbnailUrl: "http://imageurls.com",
+      qty: products[0].qty,
+      _id: products[0]._id
+    };
+
+    const res = await api
+      .put(`/api/v1/products/${toUpdate._id}`)
+      .set("Authorization", token)
+      .send({ product: toUpdate })
+      .expect(200)
+      .expect("Content-Type", /application\/json/);
+
+    expect(res.body.name).toBe(toUpdate.name);
+  });
+
+  test("do not update an invalid product", async () => {
+    const id = mongoose.Types.ObjectId();
+
+    const toUpdate = {
+      name: "updated name",
+      price: 0,
+      description: "description updated",
+      thumbnailUrl: "http://imageurls.com",
+      qty: 0
+    };
+
+    await api
+      .put(`/api/v1/products/${id}`)
+      .set("Authorization", token)
+      .send({ product: toUpdate })
+      .expect(404);
+  });
+
+  test("product is not passed in request body", async () => {
+    const products = await Product.find({}).lean();
+    const id = products[0]._id;
+
+    await api
+      .put(`/api/v1/products/${id}`)
+      .set("Authorization", token)
+      .send({})
+      .expect(422);
+  });
+  // TODO: check req.body has required properties
+});
+
 afterAll(async () => {
   await mongoose.connection.close();
 });
