@@ -54,22 +54,23 @@ async function createProduct(req, res) {
 // @route PUT /api/v1/products/:id
 async function updateProduct(req, res) {
   if (req.body.product) {
+    const { id } = req.params;
     const {
       name,
       price,
       description,
       thumbnailUrl,
-      qty,
-      _id
+      qty
     } = req.body.product;
 
     const options = {
       new: true,
       runValidators: true
     };
+    console.log(req.body.product);
 
     // return updated product
-    const product = await Product.findByIdAndUpdate(_id, {
+    const product = await Product.findByIdAndUpdate(id, {
       name,
       price,
       description,
