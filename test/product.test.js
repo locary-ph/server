@@ -263,7 +263,7 @@ describe("PUT /products/:id", () => {
     const res = await api
       .put(`/api/v1/products/${toUpdate._id}`)
       .set("Authorization", token)
-      .send(toUpdate)
+      .send({ product: toUpdate })
       .expect(200)
       .expect("Content-Type", /application\/json/);
 
@@ -284,8 +284,19 @@ describe("PUT /products/:id", () => {
     await api
       .put(`/api/v1/products/${id}`)
       .set("Authorization", token)
-      .send(toUpdate)
+      .send({ product: toUpdate })
       .expect(404);
+  });
+
+  test("product is not passed in request body", async () => {
+    const products = await Product.find({}).lean();
+    const id = products[0]._id;
+
+    await api
+      .put(`/api/v1/products/${id}`)
+      .set("Authorization", token)
+      .send({})
+      .expect(422);
   });
   // TODO: check req.body has required properties
 });

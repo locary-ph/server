@@ -53,30 +53,35 @@ async function createProduct(req, res) {
 // @desc  Edit a product
 // @route PUT /api/v1/products/:id
 async function updateProduct(req, res) {
-  const {
-    name,
-    price,
-    description,
-    thumbnailUrl,
-    qty,
-    _id
-  } = req.body;
+  if (req.body.product) {
+    const {
+      name,
+      price,
+      description,
+      thumbnailUrl,
+      qty,
+      _id
+    } = req.body.product;
 
-  const options = {
-    new: true,
-    runValidators: true
-  };
+    const options = {
+      new: true,
+      runValidators: true
+    };
 
-  // return updated product
-  const product = await Product.findByIdAndUpdate(_id, {
-    name,
-    price,
-    description,
-    thumbnailUrl,
-    qty,
-  }, options);
+    // return updated product
+    const product = await Product.findByIdAndUpdate(_id, {
+      name,
+      price,
+      description,
+      thumbnailUrl,
+      qty,
+    }, options);
 
-  helper.checkDocument(res, product, product);
+    helper.checkDocument(res, product, product);
+  } else {
+    res.status(422);
+    throw new Error("Cannot process entity");
+  }
 }
 
 // @desc  Fetch single product
