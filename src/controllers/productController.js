@@ -43,6 +43,7 @@ async function createProduct(req, res) {
     thumbnailUrl,
     qty
   });
+  console.log(product);
 
   const createdProduct = await product.save();
 
