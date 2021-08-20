@@ -15,7 +15,14 @@ const initialUser = {
   shopName: "test",
   firstName: "Juan",
   lastName: "dela Cruz",
-  shopUrl: "test"
+  shopUrl: "test",
+  mobileNumber: "09123456789",
+  shopLogo: "logo",
+  faqs: [{
+    question: "question1",
+    answer: "asnw1"
+  }],
+  shopDescription: "ths is a desscription"
 };
 
 beforeAll(async () => {

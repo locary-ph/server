@@ -17,4 +17,56 @@ async function getShop(req, res) {
   }
 }
 
-module.exports = { getShop };
+// @desc  Edit merchant account info
+// @route PUT /api/v1/merchants/account
+async function updatePersonalDetails(req, res) {
+  const {
+    firstName, lastName, email, mobileNumber, shopLogo
+  } = req.body;
+
+  const options = {
+    new: true,
+    runValidators: true,
+    // return only updated fields
+    select: "firstName lastName email mobileNumber shopLogo",
+  };
+
+  // return updated merchant
+  const merchant = await Merchant.findByIdAndUpdate(req.user._id, {
+    firstName,
+    lastName,
+    email,
+    mobileNumber,
+    shopLogo
+  }, options);
+
+  helper.checkDocument(res, merchant, merchant, "No merchant found");
+}
+
+// @desc  Edit merchant shop information
+// @route PUT /api/v1/merchants/shop
+async function updateShop(req, res) {
+  const { shopName, shopDescription, faqs } = req.body;
+
+  const options = {
+    new: true,
+    runValidators: true,
+    // return only updated fields
+    select: "shopName shopDescription faqs",
+  };
+
+  // return updated merchant
+  const merchant = await Merchant.findByIdAndUpdate(req.user._id, {
+    shopName,
+    shopDescription,
+    faqs
+  }, options);
+
+  helper.checkDocument(res, merchant, merchant, "No merchant found");
+}
+
+module.exports = {
+  getShop,
+  updatePersonalDetails,
+  updateShop
+};

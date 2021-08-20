@@ -19,7 +19,15 @@ const MerchantSchema = new Schema({
   shopName: defaultOptions,
   firstName: defaultOptions,
   lastName: defaultOptions,
-  shopUrl: defaultOptions
+  shopUrl: defaultOptions,
+  mobileNumber: defaultOptions,
+  shopLogo: String,
+
+  shopDescription: String,
+  faqs: [{
+    question: String,
+    answer: String
+  }]
 }, { timestamps: true });
 
 MerchantSchema.methods.isCorrectPassword = async function isCorrectPassword(enteredPassword) {
