@@ -9,18 +9,13 @@ const router = express.Router();
 router.post("/login", async (req, res) => {
   const { email, password } = req.body;
 
-  const user = await Merchant.findOne({ email });
+  const user = await Merchant.findOne({ email }).select("-__v -createdAt -updatedAt");
 
   if (user && (await user.isCorrectPassword(password))) {
+    delete user._doc.password;
+
     res.json({
-      user: {
-        _id: user._id,
-        firstName: user.firstName,
-        lastName: user.lastName,
-        email: user.email,
-        shopName: user.shopName,
-        shopUrl: user.shopUrl,
-      },
+      user,
       token: generateToken(user._id),
     });
   } else {
