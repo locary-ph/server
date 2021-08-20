@@ -12,6 +12,7 @@ router.post("/login", async (req, res) => {
   const user = await Merchant.findOne({ email }).select("-__v -createdAt -updatedAt");
 
   if (user && (await user.isCorrectPassword(password))) {
+    // https://stackoverflow.com/a/64306956
     delete user._doc.password;
 
     res.json({
