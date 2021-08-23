@@ -1,4 +1,5 @@
 const Merchant = require("../models/merchant");
+const PaymentMethod = require("../models/paymentMethod");
 
 const helper = require("../utils/helper");
 
@@ -65,8 +66,42 @@ async function updateShop(req, res) {
   helper.checkDocument(res, merchant, merchant, "No merchant found");
 }
 
+// @desc  Add/edit payment methods
+// @route post /api/v1/merchants/paymentMethod/:merchantId
+async function updatePaymentMethods(req, res) {
+  const { merchantId } = req.params;
+  const {
+    bankTransfer, eWallet, cashOnPickup, cashOnDelivery
+  } = req.body;
+
+  // TODO: validate and sanitize fields from req.body
+
+  let paymentMethods = await PaymentMethod.findByIdAndUpdate(merchantId, {
+    bankTransfer,
+    eWallet,
+    cashOnPickup,
+    cashOnDelivery
+  }, { new: true });
+
+  // create new document if first time updating this setting
+  if (!paymentMethods) {
+    paymentMethods = new PaymentMethod({
+      merchantId,
+      bankTransfer,
+      eWallet,
+      cashOnPickup,
+      cashOnDelivery
+    });
+
+    await paymentMethods.save();
+  }
+
+  res.json(paymentMethods);
+}
+
 module.exports = {
   getShop,
   updatePersonalDetails,
-  updateShop
+  updateShop,
+  updatePaymentMethods
 };

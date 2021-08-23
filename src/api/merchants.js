@@ -7,6 +7,7 @@ const middleware = require("../middlewares");
 
 // GET /merchants?shop=sunt-est
 router.get("/", merchantController.getShop);
+router.post("/paymentMethod/:merchantId", merchantController.updatePaymentMethods);
 
 router.use(middleware.authorize);
 router.put("/personal", merchantController.updatePersonalDetails);
