@@ -139,7 +139,7 @@ describe("POST /products", () => {
     expect(products.body).toHaveLength(initialProducts.length);
   });
 
-  // TODO: create a product without thumbnail
+  // TODO(#31): create a product without thumbnail
   // TODO: should fail if product name already exists
 });
 
