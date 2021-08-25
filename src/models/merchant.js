@@ -27,7 +27,11 @@ const MerchantSchema = new Schema({
   faqs: [{
     question: String,
     answer: String
-  }]
+  }],
+  paymentMethodId: {
+    type: Schema.Types.ObjectId,
+    ref: "PaymentMethod",
+  },
 }, { timestamps: true });
 
 MerchantSchema.methods.isCorrectPassword = async function isCorrectPassword(enteredPassword) {

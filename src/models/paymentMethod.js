@@ -3,24 +3,19 @@ const mongoose = require("mongoose");
 const { Schema } = mongoose;
 
 const BankTransferSchema = new Schema({
-  bankName: String,
+  bank: String,
   accountNumber: String,
   accountName: String,
   instructions: String,
 });
 
 const EWalletSchema = new Schema({
-  walletName: String,
+  wallet: String,
   accountName: String,
   accountNumber: String,
 });
 
 const PaymentMethodSchema = new Schema({
-  merchantId: {
-    type: Schema.Types.ObjectId,
-    ref: "Merchant",
-    required: true
-  },
   bankTransfer: BankTransferSchema,
   eWallet: EWalletSchema,
   // values here are the instructions given to the customer/buyer
