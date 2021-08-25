@@ -140,7 +140,7 @@ describe("POST /products", () => {
   });
 
   // TODO(#31): create a product without thumbnail
-  // TODO: should fail if product name already exists
+  // TODO(#32): should fail if product name already exists
 });
 
 describe("GET /products", () => {
