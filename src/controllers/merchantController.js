@@ -66,42 +66,55 @@ async function updateShop(req, res) {
   helper.checkDocument(res, merchant, merchant, "No merchant found");
 }
 
-// @desc  Add/edit payment methods
-// @route post /api/v1/merchants/paymentMethod/:merchantId
-async function updatePaymentMethods(req, res) {
-  const { merchantId } = req.params;
+// @desc  Add/update payment method
+// @route POST /api/v1/merchants/paymentMethod
+async function addPaymentMethod(req, res) {
+  const merchant = await Merchant.findById(req.user._id);
+  const { paymentMethodId } = merchant;
+
+  // TODO: validate and sanitize fields from req.body
   const {
     bankTransfer, eWallet, cashOnPickup, cashOnDelivery
   } = req.body;
 
-  // TODO: validate and sanitize fields from req.body
-
-  let paymentMethods = await PaymentMethod.findByIdAndUpdate(merchantId, {
-    bankTransfer,
-    eWallet,
-    cashOnPickup,
-    cashOnDelivery
-  }, { new: true });
-
-  // create new document if first time updating this setting
-  if (!paymentMethods) {
-    paymentMethods = new PaymentMethod({
-      merchantId,
+  let paymentMethod;
+  if (paymentMethodId) {
+    paymentMethod = await PaymentMethod.findByIdAndUpdate(paymentMethodId, {
+      bankTransfer,
+      eWallet,
+      cashOnPickup,
+      cashOnDelivery
+    }, { new: true });
+  } else {
+    paymentMethod = await PaymentMethod.create({
       bankTransfer,
       eWallet,
       cashOnPickup,
       cashOnDelivery
     });
-
-    await paymentMethods.save();
+    // relate logged in user to this payment method
+    merchant.paymentMethodId = paymentMethod._id;
+    await merchant.save();
   }
 
-  res.json(paymentMethods);
+  res.json(paymentMethod);
+}
+
+// @desc  Get payment methods
+// @route GET /api/v1/merchants/paymentMethod/:id
+async function getPaymentMethod(req, res) {
+  const { id } = req.params;
+  const paymentMethod = await PaymentMethod.findById(id)
+    .select("-__v -updatedAt -createdAt")
+    .lean();
+
+  helper.checkDocument(res, paymentMethod, paymentMethod, "No payment method set");
 }
 
 module.exports = {
   getShop,
   updatePersonalDetails,
   updateShop,
-  updatePaymentMethods
+  addPaymentMethod,
+  getPaymentMethod
 };
