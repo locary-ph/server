@@ -305,7 +305,7 @@ describe("PUT /products/:id", () => {
       .send({})
       .expect(422);
   });
-  // TODO: check req.body has required properties
+  // TODO(#33): check req.body has required properties
 });
 
 afterAll(async () => {
