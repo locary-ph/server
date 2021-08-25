@@ -72,7 +72,7 @@ async function addPaymentMethod(req, res) {
   const merchant = await Merchant.findById(req.user._id);
   const { paymentMethodId } = merchant;
 
-  // TODO: validate and sanitize fields from req.body
+  // TODO(#28): validate and sanitize fields from req.body
   const {
     bankTransfer, eWallet, cashOnPickup, cashOnDelivery
   } = req.body;
