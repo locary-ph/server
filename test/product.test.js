@@ -9,7 +9,7 @@ const Merchant = require("../src/models/merchant");
 const api = request(app);
 
 // TODO(#29): Test the flow of creating and retrieving products
-// TODO: Extract mock data to its own file
+// TODO(#30): Extract mock data to its own file
 
 const initialProducts = [
   {
