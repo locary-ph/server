@@ -1,4 +1,5 @@
 const Merchant = require("../models/merchant");
+const PaymentMethod = require("../models/paymentMethod");
 
 const helper = require("../utils/helper");
 
@@ -65,8 +66,55 @@ async function updateShop(req, res) {
   helper.checkDocument(res, merchant, merchant, "No merchant found");
 }
 
+// @desc  Add/update payment method
+// @route POST /api/v1/merchants/paymentMethod
+async function addPaymentMethod(req, res) {
+  const merchant = await Merchant.findById(req.user._id);
+  const { paymentMethodId } = merchant;
+
+  // TODO: validate and sanitize fields from req.body
+  const {
+    bankTransfer, eWallet, cashOnPickup, cashOnDelivery
+  } = req.body;
+
+  let paymentMethod;
+  if (paymentMethodId) {
+    paymentMethod = await PaymentMethod.findByIdAndUpdate(paymentMethodId, {
+      bankTransfer,
+      eWallet,
+      cashOnPickup,
+      cashOnDelivery
+    }, { new: true });
+  } else {
+    paymentMethod = await PaymentMethod.create({
+      bankTransfer,
+      eWallet,
+      cashOnPickup,
+      cashOnDelivery
+    });
+    // relate logged in user to this payment method
+    merchant.paymentMethodId = paymentMethod._id;
+    await merchant.save();
+  }
+
+  res.json(paymentMethod);
+}
+
+// @desc  Get payment methods
+// @route GET /api/v1/merchants/paymentMethod/:id
+async function getPaymentMethod(req, res) {
+  const { id } = req.params;
+  const paymentMethod = await PaymentMethod.findById(id)
+    .select("-__v -updatedAt -createdAt")
+    .lean();
+
+  helper.checkDocument(res, paymentMethod, paymentMethod, "No payment method set");
+}
+
 module.exports = {
   getShop,
   updatePersonalDetails,
-  updateShop
+  updateShop,
+  addPaymentMethod,
+  getPaymentMethod
 };
