@@ -1,6 +1,6 @@
 const Merchant = require("../models/merchant");
 const PaymentMethod = require("../models/paymentMethod");
-const Product = require("../models/product.js");
+const Product = require("../models/product");
 
 const helper = require("../utils/helper");
 
