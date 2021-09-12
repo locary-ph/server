@@ -72,6 +72,6 @@ describe("GET /merchant/shop", () => {
       .expect(200)
       .expect("Content-Type", /application\/json/);
 
-    expect(res.body.firstName).toBe(initialUser.firstName);
+    expect(res.body.user.firstName).toBe(initialUser.firstName);
   });
 });
