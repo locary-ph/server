@@ -1,3 +1,4 @@
+const mongoose = require("mongoose");
 const Product = require("../models/product");
 const helper = require("../utils/helper");
 
@@ -94,6 +95,20 @@ async function getProductById(req, res) {
   helper.checkDocument(res, product, product);
 }
 
+// @desc  Fetch single product
+// @route GET /api/v1/products/:merchantId/:productName
+async function getProductByName(req, res) {
+  const merchantId = mongoose.Types.ObjectId(req.params.merchantId);
+  const name = req.params.productName;
+
+  const product = await Product.findOne({
+    name,
+    merchantId
+  });
+
+  helper.checkDocument(res, product, product);
+}
+
 // @desc  Delete single product
 // @route DELETE /api/v1/products/:id
 async function deleteProductById(req, res) {
@@ -107,5 +122,6 @@ module.exports = {
   getProductById,
   createProduct,
   deleteProductById,
-  updateProduct
+  updateProduct,
+  getProductByName
 };
