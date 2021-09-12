@@ -1,5 +1,6 @@
 const Merchant = require("../models/merchant");
 const PaymentMethod = require("../models/paymentMethod");
+const Product = require("../models/product");
 
 const helper = require("../utils/helper");
 
@@ -8,10 +9,18 @@ const helper = require("../utils/helper");
 async function getShop(req, res) {
   if (req.query.shop) {
     const { shop } = req.query;
-    const merchant = await Merchant.findOne({ shopUrl: shop });
+    const merchant = await Merchant.findOne({ shopUrl: shop }).populate("paymentMethodId");
 
-    const errorMessage = "No merchant found";
-    helper.checkDocument(res, merchant, merchant, errorMessage);
+    if (merchant) {
+      const products = await Product.find({ merchantId: merchant._id });
+      res.json({
+        user: merchant,
+        products
+      });
+    } else {
+      res.status(404);
+      throw new Error("Shop not found");
+    }
   } else {
     res.status(400);
     throw new Error("Expected `shop` query parameter, received none");
