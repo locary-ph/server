@@ -11,7 +11,7 @@ router.get("/paymentMethod/:id", merchantController.getPaymentMethod);
 
 router.use(middleware.authorize);
 router.post("/paymentMethod", merchantController.addPaymentMethod);
-router.put("/personal", merchantController.updatePersonalDetails);
+router.put("/merchant-info", merchantController.updatePersonalDetails);
 router.put("/shop", merchantController.updateShop);
 
 module.exports = router;
