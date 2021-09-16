@@ -35,6 +35,15 @@ async function createOrder(req, res) {
   }
 }
 
+async function confirmOrderById(req, res) {
+  const { orderID } = req.body;
+  const result = await Order.findByIdAndUpdate(orderID, {
+    orderStatus: "ACCEPTED",
+  });
+  res.status(201);
+  res.json(result);
+}
+
 // @desc Fetch all orders of a merchant
 // @route GET /api/v1/orders
 async function getOrders(req, res) {
@@ -69,7 +78,8 @@ async function getOrderById(req, res) {
 
 module.exports = {
   createOrder,
+  confirmOrderById,
   getOrders,
   getOrderById,
-  getRecentOrders
+  getRecentOrders,
 };
