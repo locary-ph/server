@@ -40,7 +40,6 @@ async function confirmOrderById(req, res) {
   const result = await Order.findByIdAndUpdate(orderID, {
     orderStatus: "ACCEPTED",
   });
-  res.status(201);
   res.json(result);
 }
 
