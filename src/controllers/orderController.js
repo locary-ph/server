@@ -1,4 +1,5 @@
 const Order = require("../models/order");
+const sendEmail = require("./../utils/sendEmail");
 
 // TODO(#1): Write tests for order controller
 
@@ -36,10 +37,17 @@ async function createOrder(req, res) {
 }
 
 async function confirmOrderById(req, res) {
-  const { orderID } = req.body;
+  const { orderID, buyerEmail } = req.body;
   const result = await Order.findByIdAndUpdate(orderID, {
     orderStatus: "ACCEPTED",
   });
+  let mailDetails = {
+    from: "customerservice@locary.com.ph",
+    to: buyerEmail,
+    subject: "Order Accepted",
+    html: "<h1>Order Accepted</h1>",
+  };
+  sendEmail.sendEmail(mailDetails);
   res.json(result);
 }
 
