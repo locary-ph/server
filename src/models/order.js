@@ -88,7 +88,6 @@ const OrderSchema = new Schema(
         "DELIVERED",
         "CANCELLED",
       ],
-      default: "ORDER PLACED",
     },
   },
   { timestamps: true }
