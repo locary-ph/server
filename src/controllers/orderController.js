@@ -9,6 +9,7 @@ async function createOrder(req, res) {
     buyer,
     items,
     deliveryOption,
+    paymentOption,
     orderAmount,
     quantity,
     deliveryAddress,
@@ -23,6 +24,7 @@ async function createOrder(req, res) {
       buyer,
       items, // TODO(#3): refactor to only include relevant fields
       deliveryOption,
+      paymentOption,
       orderAmount,
       quantity,
       deliveryAddress,
@@ -71,5 +73,5 @@ module.exports = {
   createOrder,
   getOrders,
   getOrderById,
-  getRecentOrders
+  getRecentOrders,
 };
