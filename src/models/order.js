@@ -7,15 +7,15 @@ const { Schema } = mongoose;
 const BuyerSchema = new Schema({
   email: {
     type: String,
-    require: true,
+    required: true,
   },
   firstName: {
     type: String,
-    require: true,
+    required: true,
   },
   lastName: {
     type: String,
-    require: true,
+    required: true,
   },
 });
 
@@ -89,6 +89,7 @@ const OrderSchema = new Schema(
         "DELIVERED",
         "CANCELLED",
       ],
+      default: "ORDER PLACED"
     },
   },
   { timestamps: true }

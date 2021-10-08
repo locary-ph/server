@@ -1,3 +1,4 @@
+const mongoose = require("mongoose");
 const Order = require("../models/order");
 
 // TODO(#1): Write tests for order controller
@@ -13,6 +14,7 @@ async function createOrder(req, res) {
     orderAmount,
     quantity,
     deliveryAddress,
+    merchantId
   } = req.body;
 
   if (items && items.length === 0) {
@@ -20,7 +22,7 @@ async function createOrder(req, res) {
     throw new Error("No items in cart");
   } else {
     const order = new Order({
-      merchantId: req.user._id,
+      merchantId: mongoose.Types.ObjectId(merchantId),
       buyer,
       items, // TODO(#3): refactor to only include relevant fields
       deliveryOption,
@@ -40,7 +42,7 @@ async function createOrder(req, res) {
 // @desc Fetch all orders of a merchant
 // @route GET /api/v1/orders
 async function getOrders(req, res) {
-  const orders = await Order.find({ merchantId: req.user._id });
+  const orders = await Order.find({ merchantId: req.user._id }).select("-__v");
 
   res.json(orders);
 }
