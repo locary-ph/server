@@ -37,6 +37,14 @@ async function createOrder(req, res) {
   }
 }
 
+async function updateOrderStatus(req, res) {
+  const { orderID, orderStatus } = req.body;
+  const result = await Order.findByIdAndUpdate(orderID, {
+    orderStatus,
+  });
+  res.json(result);
+}
+
 // @desc Fetch all orders of a merchant
 // @route GET /api/v1/orders
 async function getOrders(req, res) {
@@ -71,6 +79,7 @@ async function getOrderById(req, res) {
 
 module.exports = {
   createOrder,
+  updateOrderStatus,
   getOrders,
   getOrderById,
   getRecentOrders,
