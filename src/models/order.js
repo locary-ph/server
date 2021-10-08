@@ -79,6 +79,7 @@ const OrderSchema = new Schema(
     orderStatus: {
       type: String,
       enum: [
+        "UNPAID",
         "PAID",
         "ORDER PLACED",
         "APPROVED",
