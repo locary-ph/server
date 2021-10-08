@@ -37,11 +37,11 @@ async function createOrder(req, res) {
   }
 }
 
+// @desc Updates the order status
+// @route POST /api/v1/orders
 async function updateOrderStatus(req, res) {
   const { orderID, orderStatus } = req.body;
-  const result = await Order.findByIdAndUpdate(orderID, {
-    orderStatus,
-  });
+  const result = await Order.findByIdAndUpdate(orderID, { orderStatus });
   res.json(result);
 }
 
