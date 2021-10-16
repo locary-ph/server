@@ -83,13 +83,13 @@ const OrderSchema = new Schema(
         "PAID",
         "ORDER PLACED",
         "APPROVED",
-        "REJECT",
+        "REJECTED",
         "TO DELIVER",
         "ON THE WAY",
         "DELIVERED",
         "CANCELLED",
       ],
-      default: "ORDER PLACED"
+      default: "ORDER PLACED",
     },
   },
   { timestamps: true }
