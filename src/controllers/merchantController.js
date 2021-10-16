@@ -28,7 +28,7 @@ async function getShop(req, res) {
 }
 
 // @desc  Edit merchant account info
-// @route PUT /api/v1/merchants/account
+// @route PUT /api/v1/merchants/merchant-info
 async function updatePersonalDetails(req, res) {
   const {
     firstName, lastName, email, mobileNumber, shopLogo
@@ -48,6 +48,27 @@ async function updatePersonalDetails(req, res) {
     email,
     mobileNumber,
     shopLogo
+  }, options);
+
+  helper.checkDocument(res, merchant, merchant, "No merchant found");
+}
+
+// @desc  Update merchan delivery options
+// @route PUT /api/v1/merchants/delivery
+async function updateDeliverOptions(req, res) {
+  const { deliveryAreas, pickupAddress } = req.body;
+
+  const options = {
+    new: true,
+    runValidators: true,
+    // return only updated fields
+    select: "deliveryAreas pickupAddress",
+  };
+
+  // return updated merchant
+  const merchant = await Merchant.findByIdAndUpdate(req.user._id, {
+    deliveryAreas,
+    pickupAddress
   }, options);
 
   helper.checkDocument(res, merchant, merchant, "No merchant found");
@@ -125,5 +146,6 @@ module.exports = {
   updatePersonalDetails,
   updateShop,
   addPaymentMethod,
-  getPaymentMethod
+  getPaymentMethod,
+  updateDeliverOptions
 };
