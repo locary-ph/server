@@ -17,6 +17,12 @@ const BuyerSchema = new Schema({
     type: String,
     required: true,
   },
+  paymentDetails: {
+    bankName: String,
+    eWalletMerchant: String,
+    accountNumber: String,
+    accountName: String
+  },
 });
 
 const OrderSchema = new Schema(
