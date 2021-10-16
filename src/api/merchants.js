@@ -13,5 +13,6 @@ router.use(middleware.authorize);
 router.post("/paymentMethod", merchantController.addPaymentMethod);
 router.put("/merchant-info", merchantController.updatePersonalDetails);
 router.put("/shop", merchantController.updateShop);
+router.put("/delivery", merchantController.updateDeliverOptions);
 
 module.exports = router;
