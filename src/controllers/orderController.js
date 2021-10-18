@@ -14,7 +14,7 @@ async function createOrder(req, res) {
     orderAmount,
     quantity,
     deliveryAddress,
-    merchantId
+    merchantId,
   } = req.body;
 
   if (items && items.length === 0) {
@@ -40,11 +40,16 @@ async function createOrder(req, res) {
 }
 
 // @desc Updates the order status
-// @route POST /api/v1/orders
+// @route PUT /api/v1/orders
 async function updateOrderStatus(req, res) {
   const { orderID, orderStatus } = req.body;
-  const result = await Order.findByIdAndUpdate(orderID, { orderStatus });
-  res.json(result);
+  const order = await Order.findByIdAndUpdate(orderID, { orderStatus });
+  if (order) {
+    res.json(order);
+  } else {
+    res.status(404);
+    throw new Error("Order details not found");
+  }
 }
 
 // @desc Fetch all orders of a merchant
