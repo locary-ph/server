@@ -14,7 +14,7 @@ async function createOrder(req, res) {
     orderAmount,
     quantity,
     deliveryAddress,
-    merchantId
+    merchantId,
   } = req.body;
 
   if (items && items.length === 0) {
@@ -36,6 +36,19 @@ async function createOrder(req, res) {
 
     res.status(201);
     res.json(createdOrder);
+  }
+}
+
+// @desc Updates the order status
+// @route PUT /api/v1/orders
+async function updateOrderStatus(req, res) {
+  const { orderID, orderStatus } = req.body;
+  const order = await Order.findByIdAndUpdate(orderID, { orderStatus });
+  if (order) {
+    res.json(order);
+  } else {
+    res.status(404);
+    throw new Error("Order details not found");
   }
 }
 
@@ -73,6 +86,7 @@ async function getOrderById(req, res) {
 
 module.exports = {
   createOrder,
+  updateOrderStatus,
   getOrders,
   getOrderById,
   getRecentOrders,

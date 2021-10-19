@@ -6,6 +6,7 @@ const middlewares = require("../middlewares");
 const orderController = require("../controllers/orderController");
 
 router.post("/", orderController.createOrder);
+router.put("/status", orderController.updateOrderStatus);
 router.use(middlewares.authorize);
 router.get("/", orderController.getOrders);
 router.get("/recent", orderController.getRecentOrders);
