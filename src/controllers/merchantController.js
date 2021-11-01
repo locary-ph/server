@@ -9,7 +9,9 @@ const helper = require("../utils/helper");
 async function getShop(req, res) {
   if (req.query.shop) {
     const { shop } = req.query;
-    const merchant = await Merchant.findOne({ shopUrl: shop }).populate("paymentMethodId");
+    const merchant = await Merchant
+      .findOne({ shopUrl: shop })
+      .populate("paymentMethodId", "-_id -__v -createdAt -updatedAt");
 
     if (merchant) {
       const products = await Product.find({ merchantId: merchant._id });
