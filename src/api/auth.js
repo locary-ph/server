@@ -50,9 +50,4 @@ router.post("/signup", async (req, res) => {
   }
 });
 
-router.post("/assignment", (req, res) => {
-  res.type("application/json");
-  res.send({ instruction: "dequeue" });
-});
-
 module.exports = router;
