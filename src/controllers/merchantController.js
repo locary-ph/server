@@ -1,8 +1,9 @@
+const bcrypt = require("bcryptjs");
+
 const Merchant = require("../models/merchant");
 const PaymentMethod = require("../models/paymentMethod");
 const Product = require("../models/product");
 
-const bcrypt = require("bcryptjs");
 const helper = require("../utils/helper");
 
 // @desc  Fetch merchant information and merchant's prodcuts
@@ -34,7 +35,13 @@ async function getShop(req, res) {
 // @desc  Edit merchant account info
 // @route PUT /api/v1/merchants/merchant-info
 async function updatePersonalDetails(req, res) {
-  const { firstName, lastName, email, mobileNumber, shopLogo } = req.body;
+  const {
+    firstName, 
+    lastName, 
+    email, 
+    mobileNumber, 
+    shopLogo 
+  } = req.body;
 
   const options = {
     new: true,
@@ -136,7 +143,12 @@ async function addPaymentMethod(req, res) {
   const { paymentMethodId } = merchant;
 
   // TODO(#28): validate and sanitize fields from req.body
-  const { bankTransfer, eWallet, cashOnPickup, cashOnDelivery } = req.body;
+  const { 
+    bankTransfer, 
+    eWallet, 
+    cashOnPickup, 
+    cashOnDelivery 
+  } = req.body;
 
   let paymentMethod;
   if (paymentMethodId) {
