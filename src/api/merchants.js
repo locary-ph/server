@@ -14,5 +14,6 @@ router.post("/paymentMethod", merchantController.addPaymentMethod);
 router.post("/change-password", merchantController.changePassword);
 router.put("/merchant-info", merchantController.updatePersonalDetails);
 router.put("/shop", merchantController.updateShop);
+router.put("/delivery", merchantController.updateDeliverOptions);
 
 module.exports = router;

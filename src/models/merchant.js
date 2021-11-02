@@ -9,11 +9,11 @@ const defaultOptions = {
 };
 
 const MerchantSchema = new Schema({
-  deliveryAreas: {
-    type: Map,
-    of: [String],
-    default: {}
-  }, // key: province, value: cities
+  deliveryAreas: [{
+    location: String,
+    fee: Number
+  }], // key: location, value: fee to deliver to that location
+  pickupAddress: String,
   email: defaultOptions,
   password: defaultOptions,
   shopName: defaultOptions,

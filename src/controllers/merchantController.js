@@ -10,9 +10,9 @@ const helper = require("../utils/helper");
 async function getShop(req, res) {
   if (req.query.shop) {
     const { shop } = req.query;
-    const merchant = await Merchant.findOne({ shopUrl: shop }).populate(
-      "paymentMethodId"
-    );
+    const merchant = await Merchant
+      .findOne({ shopUrl: shop })
+      .populate("paymentMethodId", "-_id -__v -createdAt -updatedAt");
 
     if (merchant) {
       const products = await Product.find({ merchantId: merchant._id });
@@ -31,7 +31,7 @@ async function getShop(req, res) {
 }
 
 // @desc  Edit merchant account info
-// @route PUT /api/v1/merchants/account
+// @route PUT /api/v1/merchants/merchant-info
 async function updatePersonalDetails(req, res) {
   const { firstName, lastName, email, mobileNumber, shopLogo } = req.body;
 
@@ -54,6 +54,27 @@ async function updatePersonalDetails(req, res) {
     },
     options
   );
+
+  helper.checkDocument(res, merchant, merchant, "No merchant found");
+}
+
+// @desc  Update merchan delivery options
+// @route PUT /api/v1/merchants/delivery
+async function updateDeliverOptions(req, res) {
+  const { deliveryAreas, pickupAddress } = req.body;
+
+  const options = {
+    new: true,
+    runValidators: true,
+    // return only updated fields
+    select: "deliveryAreas pickupAddress",
+  };
+
+  // return updated merchant
+  const merchant = await Merchant.findByIdAndUpdate(req.user._id, {
+    deliveryAreas,
+    pickupAddress
+  }, options);
 
   helper.checkDocument(res, merchant, merchant, "No merchant found");
 }
@@ -162,4 +183,5 @@ module.exports = {
   addPaymentMethod,
   getPaymentMethod,
   changePassword,
+  updateDeliverOptions
 };
