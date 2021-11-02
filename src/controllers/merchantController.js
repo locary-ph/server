@@ -36,11 +36,7 @@ async function getShop(req, res) {
 // @route PUT /api/v1/merchants/merchant-info
 async function updatePersonalDetails(req, res) {
   const {
-    firstName, 
-    lastName, 
-    email, 
-    mobileNumber, 
-    shopLogo 
+    firstName, lastName, email, mobileNumber, shopLogo 
   } = req.body;
 
   const options = {
@@ -144,10 +140,7 @@ async function addPaymentMethod(req, res) {
 
   // TODO(#28): validate and sanitize fields from req.body
   const { 
-    bankTransfer, 
-    eWallet, 
-    cashOnPickup, 
-    cashOnDelivery 
+    bankTransfer, eWallet, cashOnPickup, cashOnDelivery 
   } = req.body;
 
   let paymentMethod;
