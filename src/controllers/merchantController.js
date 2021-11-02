@@ -10,9 +10,10 @@ const helper = require("../utils/helper");
 async function getShop(req, res) {
   if (req.query.shop) {
     const { shop } = req.query;
-    const merchant = await Merchant
-      .findOne({ shopUrl: shop })
-      .populate("paymentMethodId", "-_id -__v -createdAt -updatedAt");
+    const merchant = await Merchant.findOne({ shopUrl: shop }).populate(
+      "paymentMethodId",
+      "-_id -__v -createdAt -updatedAt"
+    );
 
     if (merchant) {
       const products = await Product.find({ merchantId: merchant._id });
@@ -71,10 +72,14 @@ async function updateDeliverOptions(req, res) {
   };
 
   // return updated merchant
-  const merchant = await Merchant.findByIdAndUpdate(req.user._id, {
-    deliveryAreas,
-    pickupAddress
-  }, options);
+  const merchant = await Merchant.findByIdAndUpdate(
+    req.user._id,
+    {
+      deliveryAreas,
+      pickupAddress,
+    },
+    options
+  );
 
   helper.checkDocument(res, merchant, merchant, "No merchant found");
 }
@@ -183,5 +188,5 @@ module.exports = {
   addPaymentMethod,
   getPaymentMethod,
   changePassword,
-  updateDeliverOptions
+  updateDeliverOptions,
 };
