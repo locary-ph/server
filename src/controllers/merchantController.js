@@ -35,9 +35,7 @@ async function getShop(req, res) {
 // @desc  Edit merchant account info
 // @route PUT /api/v1/merchants/merchant-info
 async function updatePersonalDetails(req, res) {
-  const {
-    firstName, lastName, email, mobileNumber, shopLogo 
-  } = req.body;
+  const { firstName, lastName, email, mobileNumber, shopLogo } = req.body;
 
   const options = {
     new: true,
@@ -117,7 +115,7 @@ async function updateShop(req, res) {
 // @route POST /api/v1/merchants/change-password
 async function changePassword(req, res) {
   const { currentPass, newPass } = req.body;
-  let merchant = await Merchant.findById(req.user._id);
+  const merchant = await Merchant.findById(req.user._id);
   if (merchant && (await merchant.isCorrectPassword(currentPass))) {
     const salt = await bcrypt.genSalt(10);
     const password = await bcrypt.hash(newPass, salt);
@@ -140,9 +138,7 @@ async function addPaymentMethod(req, res) {
   const { paymentMethodId } = merchant;
 
   // TODO(#28): validate and sanitize fields from req.body
-  const { 
-    bankTransfer, eWallet, cashOnPickup, cashOnDelivery 
-  } = req.body;
+  const { bankTransfer, eWallet, cashOnPickup, cashOnDelivery } = req.body;
 
   let paymentMethod;
   if (paymentMethodId) {
