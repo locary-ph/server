@@ -121,7 +121,8 @@ async function changePassword(req, res) {
   if (merchant && (await merchant.isCorrectPassword(currentPass))) {
     const salt = await bcrypt.genSalt(10);
     const password = await bcrypt.hash(newPass, salt);
-    merchant = await Merchant.findByIdAndUpdate(req.user._id, { password });
+    merchant.password = password;
+    merchant.save();
 
     // https://stackoverflow.com/a/64306956
     delete merchant._doc.password;
