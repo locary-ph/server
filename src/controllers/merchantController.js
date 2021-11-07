@@ -120,7 +120,7 @@ async function changePassword(req, res) {
     if (resetToken && merchant.resetToken === resetToken) {
       merchant.password = newPass;
     } else if (currentPass && await merchant.isCorrectPassword(currentPass)) {
-      merchant.password = password;
+      merchant.password = newPass;
     } else {
       res.status(401);
       throw new Error("Incorrect credentials");
