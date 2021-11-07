@@ -61,13 +61,6 @@ router.get("/validate-reset-token/:resetToken", async (req, res) => {
     throw new Error("Invalid reset password link");
   }
 
-  // try {
-  //   jwt.verify(resetToken, process.env.JWT_SECRET);
-  // } catch (err) {
-  //   res.status(400);
-  //   throw new Error("Reset password link expired");
-  // }
-
   res.status(201).json({ user });
 });
 
@@ -86,15 +79,13 @@ router.post("/generate-reset-link", async (req, res) => {
     user.resetToken = resetToken;
     await user.save();
     const link = `http://localhost:3000/auth/forgot-password/${resetToken}`;
-    // const link = `http://dashboard.locary.ph/auth/forgot-password/${user._id}/${token}`;
+    // const link = `http://dashboard.locary.ph/auth/forgot-password/${resetToken}`;
     console.log(link);
   } catch (err) {
     throw new Error(err.message);
   }
 
   res.status(201).json({ message: "success" });
-
-  // console.log(user);
 });
 
 module.exports = router;
