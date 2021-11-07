@@ -22,6 +22,7 @@ const MerchantSchema = new Schema({
   shopUrl: defaultOptions,
   mobileNumber: defaultOptions,
   shopLogo: String,
+  resetToken: String,
 
   shopDescription: String,
   faqs: [{
