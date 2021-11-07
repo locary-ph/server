@@ -121,6 +121,7 @@ async function changePassword(req, res) {
   if (merchant) {
     const salt = await bcrypt.genSalt(10);
     const password = await bcrypt.hash(newPass, salt);
+    console.log(merchant);
     if (resetToken && merchant.resetToken === resetToken) {
       merchant.password = password;
     } else if (await merchant.isCorrectPassword(currentPass)) {
@@ -129,7 +130,7 @@ async function changePassword(req, res) {
       res.status(401);
       throw new Error("Incorrect credentials");
     }
-    merchant.save();
+    await merchant.save();
 
     // https://stackoverflow.com/a/64306956
     delete merchant._doc.password;
