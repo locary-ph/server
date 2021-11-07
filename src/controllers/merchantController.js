@@ -1,5 +1,3 @@
-const bcrypt = require("bcryptjs");
-
 const Merchant = require("../models/merchant");
 const PaymentMethod = require("../models/paymentMethod");
 const Product = require("../models/product");
@@ -119,12 +117,9 @@ async function changePassword(req, res) {
   const { currentPass, newPass, resetToken } = req.body;
   const merchant = await Merchant.findById(req.user._id).select("_id password resetToken");
   if (merchant) {
-    const salt = await bcrypt.genSalt(10);
-    const password = await bcrypt.hash(newPass, salt);
-    console.log(merchant);
     if (resetToken && merchant.resetToken === resetToken) {
-      merchant.password = password;
-    } else if (await merchant.isCorrectPassword(currentPass)) {
+      merchant.password = newPass;
+    } else if (currentPass && await merchant.isCorrectPassword(currentPass)) {
       merchant.password = password;
     } else {
       res.status(401);
