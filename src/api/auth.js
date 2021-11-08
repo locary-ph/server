@@ -17,7 +17,7 @@ router.post("/login", async (req, res) => {
 
     res.json({
       user,
-      token: generateToken(user._id),
+      token: generateToken.generateToken(user._id),
     });
   } else {
     res.status(401);
@@ -42,12 +42,50 @@ router.post("/signup", async (req, res) => {
       email: user.email,
       shopName: user.shopName,
       shopUrl: user.shopUrl,
-      token: generateToken(user._id),
+      token: generateToken.generateToken(user._id),
     });
   } else {
     res.status(400);
     throw new Error("Invalid user credentials");
   }
+});
+
+// @desc  Validate password reset link
+// @route GET /api/v1/auth/validate-reset-token
+router.get("/validate-reset-token/:resetToken", async (req, res) => {
+  const { resetToken } = req.params;
+  const user = await Merchant.findOne({ resetToken }).select("_id resetToken");
+
+  if (!user || (user.resetToken !== resetToken)) {
+    res.status(400);
+    throw new Error("Invalid reset password link");
+  }
+
+  res.status(201).json({ user });
+});
+
+// @desc  Create a reset token
+// @route POST /api/v1/auth/generate-reset-link
+router.post("/generate-reset-link", async (req, res) => {
+  const user = await Merchant.findOne({ email: req.body.email });
+
+  if (!user) {
+    res.status(400);
+    throw new Error("Account cannot be found!");
+  }
+
+  try {
+    const resetToken = await generateToken.generateResetToken(user._id);
+    user.resetToken = resetToken;
+    await user.save();
+    const link = `http://localhost:3000/auth/forgot-password/${resetToken}`;
+    // const link = `http://dashboard.locary.ph/auth/forgot-password/${resetToken}`;
+    console.log(link);
+  } catch (err) {
+    throw new Error(err.message);
+  }
+
+  res.status(201).json({ message: "success" });
 });
 
 module.exports = router;

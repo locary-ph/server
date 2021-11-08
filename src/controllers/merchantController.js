@@ -1,5 +1,3 @@
-const bcrypt = require("bcryptjs");
-
 const Merchant = require("../models/merchant");
 const PaymentMethod = require("../models/paymentMethod");
 const Product = require("../models/product");
@@ -35,8 +33,8 @@ async function getShop(req, res) {
 // @desc  Edit merchant account info
 // @route PUT /api/v1/merchants/merchant-info
 async function updatePersonalDetails(req, res) {
-  const { 
-    firstName, lastName, email, mobileNumber, shopLogo,
+  const {
+    firstName, lastName, email, mobileNumber, shopLogo
   } = req.body;
 
   const options = {
@@ -116,19 +114,22 @@ async function updateShop(req, res) {
 // @desc  Change merchant password
 // @route POST /api/v1/merchants/change-password
 async function changePassword(req, res) {
-  const { currentPass, newPass } = req.body;
-  const merchant = await Merchant.findById(req.user._id);
-  if (merchant && (await merchant.isCorrectPassword(currentPass))) {
-    const salt = await bcrypt.genSalt(10);
-    const password = await bcrypt.hash(newPass, salt);
-    merchant.password = password;
-    merchant.save();
+  const { currentPass, newPass, resetToken } = req.body;
+  const merchant = await Merchant.findById(req.user._id).select("_id password resetToken");
+  if (merchant) {
+    if (resetToken && merchant.resetToken === resetToken) {
+      merchant.password = newPass;
+      delete merchant._doc.resetToken;
+    } else if (currentPass && await merchant.isCorrectPassword(currentPass)) {
+      merchant.password = newPass;
+    } else {
+      res.status(401);
+      throw new Error("Incorrect credentials");
+    }
+    await merchant.save();
 
     // https://stackoverflow.com/a/64306956
     delete merchant._doc.password;
-  } else {
-    res.status(401);
-    throw new Error("Incorrect current password");
   }
   helper.checkDocument(res, merchant, merchant, "Account cannot be found");
 }
@@ -140,8 +141,8 @@ async function addPaymentMethod(req, res) {
   const { paymentMethodId } = merchant;
 
   // TODO(#28): validate and sanitize fields from req.body
-  const { 
-    bankTransfer, eWallet, cashOnPickup, cashOnDelivery,
+  const {
+    bankTransfer, eWallet, cashOnPickup, cashOnDelivery
   } = req.body;
 
   let paymentMethod;
