@@ -119,6 +119,7 @@ async function changePassword(req, res) {
   if (merchant) {
     if (resetToken && merchant.resetToken === resetToken) {
       merchant.password = newPass;
+      delete merchant._doc.resetToken;
     } else if (currentPass && await merchant.isCorrectPassword(currentPass)) {
       merchant.password = newPass;
     } else {
